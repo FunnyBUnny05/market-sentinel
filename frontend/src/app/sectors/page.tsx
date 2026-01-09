@@ -1,29 +1,19 @@
 'use client';
 
-import { SectorRankingTable } from '@/components/SectorRankingTable';
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { MetricCard } from '@/components/MetricCard';
 import { ZScoreTimeseriesChart } from '@/components/charts/ZScoreChart';
+import { SectorRankingTable } from '@/components/SectorRankingTable';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useState } from 'react';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import { mockSectorZScores, mockSectorTimeseries } from '@/lib/mockData';
 
 export default function SectorsPage() {
     const [benchmark, setBenchmark] = useState('SPY');
     const [windowDays, setWindowDays] = useState('252');
 
-    const { data: zscores, isLoading: loadingZ } = useQuery({
-        queryKey: ['sectors-zscore', benchmark, windowDays],
-        queryFn: () => fetch(`${API_URL}/api/v1/sectors/zscore?benchmark=${benchmark}&window=${windowDays}`).then(r => r.json()),
-    });
-
-    const { data: timeseries, isLoading: loadingTS } = useQuery({
-        queryKey: ['sectors-timeseries', benchmark, windowDays],
-        queryFn: () => fetch(`${API_URL}/api/v1/sectors/zscore/timeseries?benchmark=${benchmark}&window=${windowDays}`).then(r => r.json()),
-    });
-
-    if (loadingZ || loadingTS) return <div className="p-10 text-center">Loading Data...</div>;
+    // Use mock data instead of API
+    const zscores = mockSectorZScores;
+    const timeseries = mockSectorTimeseries;
 
     // Find cheapest and most extended
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

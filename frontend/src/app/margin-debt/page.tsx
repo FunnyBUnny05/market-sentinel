@@ -1,34 +1,18 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { MetricCard } from '@/components/MetricCard';
 import { MarginDebtChart } from '@/components/charts/MarginDebtChart';
 import { YoYGrowthChart } from '@/components/charts/YoYGrowthChart';
 import { WarningBanner } from '@/components/WarningBanner';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import { mockMarginDebt } from '@/lib/mockData';
 
 export default function MarginDebtPage() {
-    const { data, isLoading } = useQuery({
-        queryKey: ['margin-debt'],
-        queryFn: () => fetch(`${API_URL}/api/v1/margin-debt`).then(r => r.json()),
-    });
-
-    if (isLoading) return <div className="p-10 text-center">Loading...</div>;
-
-    const { current, timeseries } = data || {};
+    // Use mock data instead of API
+    const data = mockMarginDebt;
+    const { current, timeseries } = data;
 
     // Calculate current YoY for banner
-    let currentYoY = null;
-    if (timeseries && timeseries.length > 12) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const sorted = [...timeseries].sort((a: any, b: any) => new Date(a.month).getTime() - new Date(b.month).getTime());
-        const latest = sorted[sorted.length - 1];
-        const yearAgo = sorted[sorted.length - 13];
-        if (latest && yearAgo) {
-            currentYoY = ((latest.total_debt_billions - yearAgo.total_debt_billions) / yearAgo.total_debt_billions) * 100;
-        }
-    }
+    const currentYoY = current?.yoy_growth_pct || null;
 
     return (
         <div className="space-y-8">

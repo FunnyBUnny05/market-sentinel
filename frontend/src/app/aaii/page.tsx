@@ -1,21 +1,14 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { MetricCard } from '@/components/MetricCard';
 import { AllocationChart } from '@/components/charts/AllocationChart';
 import { ExtremesTable } from '@/components/ExtremesTable';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import { mockAAII } from '@/lib/mockData';
 
 export default function AAIIPage() {
-    const { data, isLoading } = useQuery({
-        queryKey: ['aaii'],
-        queryFn: () => fetch(`${API_URL}/api/v1/aaii/allocation`).then(r => r.json()),
-    });
-
-    if (isLoading) return <div className="p-10 text-center">Loading...</div>;
-
-    const { current, timeseries, historical } = data || {};
+    // Use mock data instead of API
+    const data = mockAAII;
+    const { current, timeseries, historical } = data;
 
     return (
         <div className="space-y-8">
