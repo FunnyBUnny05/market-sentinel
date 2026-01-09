@@ -7,17 +7,18 @@ import { cn } from '@/lib/utils';
 export function Header() {
     const pathname = usePathname();
 
+    // Links should NOT include basePath - Next.js handles that automatically
     const tabs = [
-        { name: 'Sector Z-Score', href: '/market-sentinel/sectors/' },
-        { name: 'Margin Debt', href: '/market-sentinel/margin-debt/' },
-        { name: 'AAII Allocation', href: '/market-sentinel/aaii/' },
+        { name: 'Sector Z-Score', href: '/sectors/' },
+        { name: 'Margin Debt', href: '/margin-debt/' },
+        { name: 'AAII Allocation', href: '/aaii/' },
     ];
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-zinc-800 bg-background/80 backdrop-blur-lg">
             <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
                 <div className="mr-4 flex">
-                    <Link href="/market-sentinel/" className="mr-6 flex items-center space-x-2 font-bold text-xl tracking-tighter hover:text-primary transition-colors">
+                    <Link href="/" className="mr-6 flex items-center space-x-2 font-bold text-xl tracking-tighter hover:text-primary transition-colors">
                         market_sentinel
                     </Link>
                     <nav className="flex items-center space-x-6 text-sm font-medium">
@@ -27,7 +28,7 @@ export function Header() {
                                 href={tab.href}
                                 className={cn(
                                     "transition-colors hover:text-foreground/80",
-                                    pathname === tab.href || pathname?.startsWith(tab.href.replace(/\/$/, '')) ? "text-foreground" : "text-foreground/60"
+                                    pathname?.includes(tab.href.replace(/\/$/, '')) ? "text-foreground" : "text-foreground/60"
                                 )}
                             >
                                 {tab.name}

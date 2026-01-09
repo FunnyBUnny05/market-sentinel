@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 
 export default function Home() {
-  redirect('/market-sentinel/sectors/');
+  // Redirect to sectors page - Next.js handles basePath automatically
+  redirect('/sectors/');
 }
